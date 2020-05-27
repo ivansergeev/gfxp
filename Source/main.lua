@@ -3,20 +3,26 @@
 
 	Option 1:
 		local gfxp = GFXP
+		
 		-- in the code, specified pattern name
 		gfxp.set('gray')
+		
 		-- or the specified pattern table
 		gfxp.set({0xE7, 0xDB, 0xBD, 0x7E, 0x7E, 0xBD, 0xDB, 0xE7})
+		
 		-- or the specified pattern name
 		playdate.graphics.setPattern(gfxp.gray)
 		
 	Option 2:
+		
 		-- in the code, specified pattern name
 		GFXP.set('gray')
+		
 		-- or the specified pattern table
 		GFXP.set({0xE7, 0xDB, 0xBD, 0x7E, 0x7E, 0xBD, 0xDB, 0xE7})
 	
 	Option 3:
+	
 		-- the specified pattern name
 		playdate.graphics.setPattern(GFXP.gray)	
 	
@@ -83,9 +89,9 @@ end
 -- Update
 
 function playdate.update()
-	-- gfx.clear()
-	playdate.timer.updateTimers()
+	gfx.clear()
 	patternview:drawInRect(0, 0, 400, patternviewHeight)
+	playdate.timer.updateTimers()
 end
 
 -- Tips

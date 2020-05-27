@@ -235,7 +235,6 @@
 		  window.dataLayer = window.dataLayer || [];
 		  function gtag(){dataLayer.push(arguments);}
 		  gtag('js', new Date());
-		
 		  gtag('config', 'UA-1190854-1');
 		</script>
 		
@@ -259,7 +258,6 @@
 						<a href="#" class="js-fill-button" data-color="black" title="fill">black</a>
 						&bull;
 						<a href="#" class="js-fill-button" data-color="white" title="fill">white</a>
-						
 						
 					</div>
 					<div class="pattern-preview">
@@ -302,7 +300,11 @@
 							&bull;
 						</li>
 						<li>
-							<a href="#" class="js-code-button" data-mode="pdfull" title="">playdate full</a>		
+							<a href="#" class="js-code-button" data-mode="pdfull" title="">playdate full</a>	
+							&bull;	
+						</li>
+						<li>
+							<a href="#" class="js-code-button" data-mode="share" title="">share</a>		
 						</li>
 					</ul>
 					<!-- new samples  -->					
@@ -535,6 +537,15 @@
 						case 'pdfull':
 							str = 'playdate.graphics.setPattern({'+ patternCode +'})';
 							break;
+							
+						case 'share':
+						
+							let q = patternCode.replace(/\s/g,'');
+							q = q.replace(/(0x)/g,'');
+							q = q.replace(/,/g,'-');
+							
+							str = 'http://ivansergeev.com/gfxp/?p=' + q;
+							break;
 					}
 
 					patternCodeText.innerHTML =
@@ -606,8 +617,33 @@
 					
 					// new samples
 					// hiddenCopyArrayButton.addEventListener('click', copyArrayToClipboard);
-
+					
+					initShare();
 					initSamples();
+				};
+				
+				// Share
+				
+				const initShare = function (){
+
+					pattern = querystring['p'];
+					if(pattern !== '' && /^([\dABCDEFGH]{1,2}-[\dABCDEFGH]{1,2}-[\dABCDEFGH]{1,2}-[\dABCDEFGH]{1,2}-[\dABCDEFGH]{1,2}-[\dABCDEFGH]{1,2}-[\dABCDEFGH]{1,2}-[\dABCDEFGH]{1,2})$/ig.test(pattern)){
+
+						let rowdata = pattern.split('-'),
+							data = [];
+							rowdata = rowdata.map(val => parseInt(val, 16).toString(2).padStart(8, '0'));
+						
+						for(let r=0; r < 8; r++){
+
+							let row = rowdata[r].split('');
+							data[r+1] = [];
+
+							for (let c=0; c < 8; c++){
+								data[r+1][c+1] = Number(row[c]);
+							}
+						}
+						restorePatternGridFromData(data);
+					}
 				};
 				
 				// Samples
@@ -641,29 +677,44 @@
 
 					for(let r=0; r < 8; r++){
 						
-						let row = (rowdata[r] >>> 0).toString(2);
-						
-						if(row.length < 8){
-							while (row.length < 8) row = '0' + row;
-						}
-
-						row = row.split('');
+						let row = (rowdata[r] >>> 0).toString(2).padStart(8, '0').split('');
 						data[r+1] = [];
 
 						for (let c=0; c < 8; c++){
 							data[r+1][c+1] = Number(row[c]);
 						}
 					};
+					
+					restorePatternGridFromData(data);
+				};
+				
+				const restorePatternGridFromData = function(data){
 					patternGridItems.forEach(el => {
-
 						if(data[el.dataset.row][el.dataset.col] == 0) el.classList.add('black');
 						else el.classList.remove('black');
 					});
-
 				};
-
+				
 				init();
 			};
+
+// Helpers
+
+var querystring = (function(a) {
+    if (a === '') return {};
+    let b = {};
+    for (let i = 0; i < a.length; ++i)
+    {
+        let p=a[i].split('=', 2);
+        if (p.length == 1)
+            b[p[0]] = '';
+        else
+            b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, ' '));
+    }
+    return b;
+})(window.location.search.substr(1).split('&'));
+
+// GFXP lib
 			
 const GFXP = {
 	// Grayscale
