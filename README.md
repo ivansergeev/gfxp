@@ -23,7 +23,7 @@ Local / offline version: open gfxp-editor.html from the 'Tools' folder in any mo
 
 ### Using GFXP lib
 
-Before you begin, you must import 'gfxp.lua' from 'Source/helpers/' folder into the source folder of your project.
+Before you begin, import 'gfxp.lua' from 'Source/helpers/' folder into the source folder of your project.
 
 ```sh
 import 'helpers/gfxp'
@@ -32,7 +32,7 @@ import 'helpers/gfxp'
 
 ### Use cases GFXP lib
 
-The library includes 100 ready-made patterns, for the use of which it is enough to indicate their name.
+The library includes 100 ready-made patterns. To use any of them, all you need is to indicate its name.
 
 Option 1:
 
