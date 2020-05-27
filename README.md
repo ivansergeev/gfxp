@@ -1,9 +1,9 @@
 # GFXP
 
-GFXP is a small library with a collection of templates for Playdate. Includes a visual editor for modern browsers (no internet required) for quickly creating and using patterns.
+GFXP is a small library with a collection of patterns for Playdate. Includes a visual editor for modern browsers (no internet required) for quickly creating and using patterns.
 
-- Draw something in the visual editor and see the finished template
-- Copy the template in any code format or download PNG
+- Draw something in the visual editor and see the finished pattern
+- Copy the pattern in any code format or download PNG (for design or programming)
 - Easy! Simply! Magic!
 
 ### Using GFXP Editor
@@ -48,7 +48,7 @@ GFXP.set({0xE7, 0xDB, 0xBD, 0x7E, 0x7E, 0xBD, 0xDB, 0xE7})
 Option 3:
 
 ```
-	playdate.graphics.setPattern(GFXP.gray)	
+playdate.graphics.setPattern(GFXP.gray)	
 ```
 
 
