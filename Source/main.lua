@@ -1,6 +1,6 @@
 --[[ 
-	Using GFXP
-	
+	Example of use GFXP lib
+
 	Option 1:
 		local gfxp = GFXP
 		-- in the code, specified pattern name

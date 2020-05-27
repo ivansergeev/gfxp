@@ -1,4 +1,5 @@
--- 
+ -- GFXP for Playdate (https://github.com/ivansergeev/gfxp)
+ -- 2020 © GFXP is brought to you by Ivan Sergeev
 
 GFXP = {
 	
