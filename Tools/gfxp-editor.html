@@ -5,7 +5,7 @@
 		<title>GFXP Editor for Playdate</title>
 		<meta name="description" content="Tool for Playdate developers" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<meta property="og:title" content="GFX Pattern Editor for Playdate" />
+		<meta property="og:title" content="GFXP - Pattern Editor for Playdate" />
 		<meta name="theme-color" content="#ffffff" />
 		<meta name="author" content="Ivan Sergeev">
 		<link rel="shortcut icon" href="images/favicon.png" type="image/png">
@@ -59,11 +59,16 @@
 
 			/* Pattern Grid  */
 			div.pattern-container{
+				position: relative;
 				order: 1;
 				width: 300px;
 				text-align: center;
-
 			}
+				div.pattern-container a.js-invert-button
+				{
+					margin-right: 80px;
+				}
+				
 			table, th, td {
 				box-sizing: border-box;
 				-moz-box-sizing: border-box;
@@ -238,10 +243,14 @@
 						<table class="pattern-grid">
 							<tbody></tbody>
 						</table>
+						<a href="#" class="js-invert-button" title="invert pattern">invert</a>
+						
 						fill
 						<a href="#" class="js-fill-button" data-color="black" title="fill">black</a>
 						&bull;
 						<a href="#" class="js-fill-button" data-color="white" title="fill">white</a>
+						
+						
 					</div>
 					<div class="pattern-preview">
 						<p>Preview</p>
@@ -317,7 +326,16 @@
 					if(isBlack) patternGridItems.forEach(item => item.classList.add('black'));
 					else patternGridItems.forEach(item => item.classList.remove('black'));
 				};
-
+				
+				const onClickInvertButtonHandler = function (e) {
+					
+					patternGridItems.forEach(el => {
+						if(el.classList.contains('black')) el.classList.remove('black');
+						else el.classList.add('black');
+					});
+								
+				};
+				
 				const coloringPixel = function (e) {
 					e.target.classList.toggle('black');
 					return e.target.classList.contains('black');
@@ -520,6 +538,8 @@
 
 					document.querySelectorAll('a.js-fill-button').forEach(el => el.addEventListener('click', e => onClickFillButtonHandler(e.target.dataset.color == 'black')));
 
+					document.querySelector('a.js-invert-button').addEventListener('click', onClickInvertButtonHandler);
+					
 					// Preview
 					document.querySelectorAll('a.js-download-button').forEach(el => el.addEventListener('click', downloadPattern));
 
