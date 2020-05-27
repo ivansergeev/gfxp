@@ -9,6 +9,7 @@ GFXP is a small library with a collection of patterns for Panic Playdate. Includ
 ### Using GFXP Editor
 
 Online version: [GFXP Editor](http://www.ivansergeev.com/gfxp/)
+
 Local / offline version: open gfxp-editor.html from the 'Tools' folder in any modern browser.
 
 
