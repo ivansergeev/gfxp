@@ -1,14 +1,15 @@
 # GFXP
 
-GFXP is a small library with a collection of patterns for Playdate. Includes a visual editor for modern browsers (no internet required) for quickly creating and using patterns.
+GFXP is a small library with a collection of patterns for Panic Playdate. Includes a visual [GFXP Editor](http://www.ivansergeev.com/gfxp/) for modern browsers (no internet required) for quickly creating and using patterns.
 
-- Draw something in the visual editor and see the finished pattern
-- Copy the pattern in any code format or download PNG (for design or programming)
+- Draw something in the visual editor and see the finished patterns
+- Copy the pattern in any code format or download PNG (for design and programming)
 - Easy! Simply! Magic!
 
 ### Using GFXP Editor
 
-Open gfxp-editor.html from the 'Tools' folder in any modern browser.
+Online version: [GFXP Editor](http://www.ivansergeev.com/gfxp/)
+Local / offline version: open gfxp-editor.html from the 'Tools' folder in any modern browser.
 
 
 ### Using GFXP lib
@@ -54,7 +55,10 @@ playdate.graphics.setPattern(GFXP.gray)
 
 
 ### License
-----
 
 The MIT License (MIT)
 
+
+### Trademarks
+
+[Playdate](https://play.date/) is a trademark of [Panic](https://panic.com/)

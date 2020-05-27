@@ -11,15 +11,15 @@
 		<link rel="shortcut icon" href="images/favicon.png" type="image/png">
 		<style>
 			body {
-				color: gray
+				color: gray;
 			}
 			body, textarea {
-				font-family: 'Tahoma';
+				font-family: 'Tahoma', 'Arial', sans-serif;
 				font-size: 14px;
 			}
 			a {
 				text-decorration: none;
-				color: darkorange
+				color: darkorange;
 			}
 			.hidden {
 				display: none;
@@ -213,13 +213,24 @@
 			}
 			
 		</style>
+		
+		<!-- Google Analytics -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-1190854-1"></script>
+		<script>
+		  window.dataLayer = window.dataLayer || [];
+		  function gtag(){dataLayer.push(arguments);}
+		  gtag('js', new Date());
+		
+		  gtag('config', 'UA-1190854-1');
+		</script>
+		
 	</head>
 	<body>
 		<div class="page">
 			<div class="content">
 				<header>
 					GFXP Editor for Playdate
-					<div class="github"><a href="https://" target="_blank">GFXP on GitHub</a></div>
+					<div class="github"><a href="https://github.com/ivansergeev/gfxp" target="_blank">Download GFXP on GitHub</a></div>
 				</header>
 				<div class="design-container">
 					<div class="pattern-container">
