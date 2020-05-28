@@ -53,7 +53,7 @@ function init()
 	end
 
 	table.sort(patterns, function (a,b) return a<b end)
-
+	
 	patternview = playdate.ui.gridview.new(400, 240)
 	patternview:setNumberOfRows(#patterns)
 

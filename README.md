@@ -49,7 +49,7 @@ import 'helpers/gfxp'
 
 ### Use cases GFXP lib
 
-The library includes 100 ready-made patterns. To use any of them, all you need is to indicate its name.
+The library includes 111 ready-made patterns. To use any of them, all you need is to indicate its name.
 
 Option 1:
 
