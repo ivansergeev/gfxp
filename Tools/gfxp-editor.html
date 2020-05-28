@@ -49,13 +49,22 @@
 					top: 3px;
 					font-size: 14px;
 				}
-
-			div.design-container {
+			
+			div.loading {
 				width: 100%;
-				display: flex;
+				text-align: center;
+				margin: 50px 0;	
+			}
+			
+			div.design-container {
+				display: none;
+				width: 100%;
 				flex-direction: row;
 				justify-content: center;
 			}
+				div.design-container.show{
+					display: flex;
+				}
 
 			/* Pattern Grid  */
 			div.pattern-container{
@@ -130,12 +139,16 @@
 				}
 			/* Pattern Code  */
 			div.pattern-code {
+				display: none;
 				flex-shrink: 3;
 				width: 100%;
 				text-align: center;
 				margin-top: 40px;
 				position: relative;
 			}
+				div.pattern-code.show{
+					display: block;
+				}
 				div.pattern-code span.string {
 					display: inline;
 					width: 70%;
@@ -198,10 +211,15 @@
 			
 			/* Samples */
 			div.pattern-samples {
+				display: none;
 				width: 100%;
 				margin-top: 50px;
 				text-align: center;
 			}
+				div.pattern-samples.show {
+					display: block;		
+				}
+				
 				div.pattern-samples ul {
 					display: flex;
 					flex-direction: row;
@@ -246,6 +264,10 @@
 					GFXP Editor for Playdate
 					<div class="github"><a href="https://github.com/ivansergeev/gfxp" target="_blank">Download GFXP on GitHub</a></div>
 				</header>
+				<div class="loading">
+					Loading...
+				</div>
+				
 				<div class="design-container">
 					<div class="pattern-container">
 						<p><canvas id="pattern-canvas" width="8px" height="8px"></canvas> Pattern</p>
@@ -620,6 +642,11 @@
 					
 					initShare();
 					initSamples();
+					
+					document.querySelector('div.loading').classList.add('hidden');
+					document.querySelector('div.design-container').classList.add('show');
+					document.querySelector('div.pattern-code').classList.add('show');
+					document.querySelector('div.pattern-samples').classList.add('show');
 				};
 				
 				// Share
@@ -659,7 +686,6 @@
 							}
 							
 							restorePatternGridFromData(data);
-						
 						}
 					}
 				};
