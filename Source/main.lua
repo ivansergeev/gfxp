@@ -8,7 +8,7 @@ import 'CoreLibs/easing'
 import 'CoreLibs/ui'
 import 'CoreLibs/ui/gridview'
 import 'CoreLibs/utilities/printer'
-import 'helpers/gfxp'
+import 'lib/gfxp'
 
 local gfx = playdate.graphics
 local gfxp = GFXP

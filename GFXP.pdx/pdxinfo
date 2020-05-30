@@ -1,4 +1,9 @@
+name=GFXP
+author=Ivan Sergeev
+description=Useful lib & tool for working with patterns.
+bundleID=com.ivansergeev.gfxp
+version=0.1
 pdxversion=9
-buildtime=644183511
+buildtime=644191965
 inputPath=/Users/ivansergeev/Development/PlayDate/Projects/GFXP/Source
 sdkPath=/Users/ivansergeev/Developer/PlaydateSDK
