@@ -1,6 +1,36 @@
  -- GFXP for Playdate (https://github.com/ivansergeev/gfxp)
  -- 2020 © GFXP is brought to you by Ivan Sergeev
 
+--[[ 
+	Example of use GFXP lib
+
+	Option 1:
+		local gfxp = GFXP
+		
+		-- in the code, specified pattern name
+		gfxp.set('gray')
+		
+		-- or the specified pattern table
+		gfxp.set({0xE7, 0xDB, 0xBD, 0x7E, 0x7E, 0xBD, 0xDB, 0xE7})
+		
+		-- or the specified pattern name
+		playdate.graphics.setPattern(gfxp.gray)
+		
+	Option 2:
+		
+		-- in the code, specified pattern name
+		GFXP.set('gray')
+		
+		-- or the specified pattern table
+		GFXP.set({0xE7, 0xDB, 0xBD, 0x7E, 0x7E, 0xBD, 0xDB, 0xE7})
+	
+	Option 3:
+	
+		-- the specified pattern name
+		playdate.graphics.setPattern(GFXP.gray)	
+	
+]]--
+
 GFXP = {
 	
 	-- Grayscale
@@ -144,21 +174,254 @@ GFXP = {
 	
 	-- Misc
 	usd = {0xDB, 0x81, 0x5B, 0x81, 0xDA, 0x5A, 0x81, 0xDB},
-	
-	set = function (val)
-				if val then
-					if type(val) == 'string' and GFXP[val] then
-						return playdate.graphics.setPattern(GFXP[val])
-					elseif  type(val) == 'table' and #val == 8 then
-						return playdate.graphics.setPattern(val)
-					else
-						error('GFXP: Unknown type of pattern. Value is ' .. type(val))
-					end
-				
+
+	-- -- Return patterns
+
+	getPatterns = function (justnames)
+		
+		local patterns = {}
+
+		for key, val in pairs(GFXP) do
+			if type(GFXP[key]) == 'table' and #GFXP[key] ~= 0 then 
+				if justnames then 
+					table.insert(patterns, key)
 				else
-					error('GFXP: Pattern not specified')
+					patterns[key] = val
 				end
 			end
+		end
+
+		if justnames then
+			table.sort(patterns, function (a,b) return a<b end)
+		end
+		
+		return patterns
+	end,
+
+	-- Set selected pattern 
+
+	set = function (val)
+		if val then
+			if type(val) == 'string' and GFXP[val] then
+				return playdate.graphics.setPattern(GFXP[val])
+			elseif  type(val) == 'table' and #val == 8 then
+				return playdate.graphics.setPattern(val)
+			else
+				error('GFXP: Unknown type of pattern. Value is ' .. type(val))
+			end
+		
+		else
+			error('GFXP: Pattern not specified')
+		end
+	end,
 }
+
+
+--[[
+	
+	GFXP animation - creating animation from patterns.
+	
+	How to use
+
+	-- step 1: import lib
+		
+		import 'helpers/gfxp'
+		
+		local gfxp = GFXP
+
+
+	-- step 2: create animation instance
+	-- there are two possible uses: animate a single pattern or animate multiple patterns
+		
+		-- multiple patterns
+			-- options: 
+			
+				patterns = table with patterns, required
+				patterns = {{0x7F, 0xFF, 0xFF, 0xFF, 0xF7, 0xFF, 0xFF, 0xFF},
+							{0x55, 0xAA, 0x55, 0xAA, 0x55, 0xAA, 0x55, 0xAA},
+							{0x0, 0x22, 0x0, 0x88, 0x0, 0x22, 0x0, 0x88}}
+				
+				-- or
+				
+				patterns = {gfxp.dots4, gfxp.gray, gfxp.darkgray}
+				
+				ticks = the rate of change, int, optional
+				ticks = 1 -- changes will occur every frame, default option
+				ticks = 2 -- changes will occur every second frame
+				ticks = 10 -- changes will occur every 10 frame
+				etc
+
+			-- usage:
+			
+				local a = gfxp.animate:new(patterns)
+				-- or
+				local a = gfxp.animate:new(patterns, ticks)
+			
+			-- example:
+				
+				local a = gfxp.animate:new(gfxp.getPatterns(true))
+				-- or
+				local a = gfxp.animate:new({gfxp.dots4, gfxp.gray, gfxp.darkgray}, 10)
+
+
+		-- single pattern
+			-- options: 
+				
+				pattern = table with one pattern, required
+				pattern = {0x0, 0xDF, 0xDF, 0xDF, 0x0, 0xFD, 0xFD, 0xFD}
+				-- or
+				pattern = gfxp.bricks1
+
+				direction = direction of movement of the pattern, string, required
+				direction = 'up'
+				direction = 'right'
+				direction = 'down'
+				direction = 'left'
+				
+				ticks = the rate of change, int, optional
+			
+			-- usage:
+				
+				local a = gfxp.animate:new(pattern, direction, ticks)
+			
+			-- example:
+			
+				local a = gfxp.animate:new(gfxp.bricks1, 'right', 2)
+				-- or
+				local a = gfxp.animate:new({0x0, 0xDF, 0xDF, 0xDF, 0x0, 0xFD, 0xFD, 0xFD}, 'down')
+
+
+	-- step 3: call when you update and draw some graphics
+		
+		-- usage:
+		
+			a:draw()
+		
+		-- example:
+		
+			function playdate.update()
+				a:draw()
+				playdate.graphics.fillRect(0, 0, 200, 120) -- for example
+			end
+		
+		
+]]--
+
+GFXP.animate = {}
+GFXP.animate.__index = GFXP.animate
+
+function GFXP.animate:new(patterns, ...)
+	
+	if type(patterns) ~= 'table' or #patterns == 0 then
+		error('GFXP.animate: Patterns not specified')
+	end
+	
+	local self = {}
+	setmetatable(self, metatable)
+
+	local arg = {...}
+	local mode = 1
+	local ticks = 1
+	local directions = {
+		up = 1,
+		right = 2,
+		down = 3,
+		left = 4
+	}
+
+	local currentDirection = 0
+	local currentTicks = 1
+	local currentPattern = nil
+	local singleUpdateHandler = function () end
+
+	if arg then
+
+		if type(patterns[1]) == 'table' then
+
+			ticks = arg[1] and arg[1] or ticks 
+
+		elseif type(patterns[1]) == 'number' and #patterns == 8 then
+
+			mode = 2
+			currentDirection = directions[arg[1]] and directions[arg[1]] or 0
+			ticks = arg[2] and arg[2] or ticks
+			currentPattern = patterns
+
+			if currentDirection == 1 then
+
+				singleUpdateHandler = function () table.insert(patterns, 8, table.remove(patterns, 1)) end
+
+			elseif currentDirection == 2 then
+	
+				singleUpdateHandler = function ()
+					for i=1,8 do
+						patterns[i] = (128 * (patterns[i] & 1)) + (patterns[i] >> 1)
+					end
+				end
+
+			elseif currentDirection == 3 then
+
+				singleUpdateHandler = function () table.insert(patterns, 1, table.remove(patterns)) end
+
+			elseif currentDirection == 4 then
+
+				singleUpdateHandler = function ()
+					for i=1,8 do
+						local val = patterns[i]
+						patterns[i] = (val << 1) > 255 and (val << 1) - (255 * (val >> 7)) or (val << 1) + (255 * (val >> 7))
+					end
+				end
+			else
+				error('GFXP.animate: Single pattern direction not specified')
+			end
+		end
+	end
+
+
+	function self:update()
+		
+		currentTicks += 1
+
+		if currentTicks % ticks == 0 then
+
+			if mode == 1 then
+				self.updateMultiple()
+			else
+				singleUpdateHandler()
+			end
+		end
+
+		if currentTicks == 1000 then
+			currentTicks = 0
+		end
+	end
+
+
+	function self:updateMultiple()
+		table.insert(patterns, 1, table.remove(patterns))
+		local key, _ = next(patterns)
+		currentPattern = patterns[key]
+	end
+
+
+	function self:draw()
+		
+		if not self then
+			error('GFXP.animate: Call the instance')
+		end
+
+		self:update()
+		if currentPattern then
+			GFXP.set(currentPattern)
+		end
+	end
+
+	return self
+end
+
+
+
+
+
 
 
