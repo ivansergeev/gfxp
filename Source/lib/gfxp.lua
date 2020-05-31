@@ -330,7 +330,7 @@ function GFXP.animate:new(patterns, ...)
 	}
 
 	local currentDirection = 0
-	local currentTicks = 1
+	local currentTicks = 0
 	local currentPattern = nil
 	local singleUpdateHandler = function () end
 
@@ -381,11 +381,13 @@ function GFXP.animate:new(patterns, ...)
 	function self:update()
 		
 		currentTicks += 1
-
+		
+		print(currentTicks, ticks)
+		
 		if currentTicks % ticks == 0 then
 
 			if mode == 1 then
-				self.updateMultiple()
+				self:updateMultiple()
 			else
 				singleUpdateHandler()
 			end
