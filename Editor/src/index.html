@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html class="no-js" lang="">
+<head>
+	<meta charset="utf-8" />
+	<title>GFXP Editor for Playdate</title>
+	<meta name="description" content="Tool for Playdate developers" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta property="og:title" content="GFXP - Pattern Editor for Playdate" />
+	<meta name="theme-color" content="#ffffff" />
+	<meta name="author" content="Ivan Sergeev">
+	<link rel="shortcut icon" href="images/favicon.png" type="image/png">
+	<!-- InlineCSS -->
+	<!-- Google Analytics -->
+	<%= htmlWebpackPlugin.options.dev.start %>
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-1190854-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	  gtag('config', 'UA-1190854-1');
+	</script>
+	<%= htmlWebpackPlugin.options.dev.end %>
+</head>
+<body>
+
+	<div class="page">
+		<div class="content">
+<!-- Header -->
+			<header>
+				GFXP Editor for Playdate
+				<div class="github"><a href="https://github.com/ivansergeev/gfxp" target="_blank">Download GFXP on GitHub</a></div>
+			</header>
+<!-- Loading  -->
+			<div class="loading">
+				Loading...
+			</div>
+<!-- Editor -->
+			<div class="design-container">
+				<div class="pattern-editor">
+					<p>
+						<canvas id="pattern-canvas" width="8px" height="8px"></canvas>&nbsp;Pattern
+					</p>
+					<table class="pattern-grid">
+						<tbody></tbody>
+					</table>
+					<a href="#" class="js-editor-control-button invert" title="invert pattern">invert</a>
+					fill
+					<a href="#" class="js-editor-control-button fill" data-color="black" title="fill">black</a>
+					&bull;
+					<a href="#" class="js-editor-control-button fill" data-color="white" title="fill">white</a>
+				</div>
+<!-- Preview -->
+				<div class="pattern-preview">
+					<p>
+						<a href="#" class="js-preview-zoom-button out"  data-mode="out" title="Zoom Out">-</a>
+						<a href="#" class="js-preview-zoom-button restore" data-mode="restore" title="Restore Zoom">Preview</a>
+						<a href="#" class="js-preview-zoom-button in" data-mode="in" title="Zoom In">+</a>
+					</p> 
+					<canvas id="pattern-preview-canvas" width="400px" height="240px"></canvas>
+					download <a href="#" class="js-preview-download-button" data-type="small" title="8x8 pattern">8x8</a>
+					&bull;
+					<a href="#" class="js-preview-download-button" data-type="big" title="400x240 pattern">400x240</a>
+				</div>
+			</div>
+<!-- Animate -->
+			<div class="animate-container">
+				Animate 
+				<a href="#" id="animate-control-stop" class="js-animate-control-button hidden" data-mode="stop" title="">stop</a>
+				<a href="#" id="animate-control-play" class="js-animate-control-button hidden" data-mode="play" title="">play</a>
+				<ul id="animate-list">
+					<li><a href="#" class="add-pattern">+</a></li>
+				</ul>
+				<ul id="animate-control">
+					<li class="clear hidden">
+						<a href="#" class="js-animate-control-button" data-mode="clear" title="clear animation">clear animation</a>
+						&bull;&nbsp;
+					</li>
+					<li class="remove hidden">
+						<a href="#" class="js-animate-control-button" data-mode="remove-selected" title="remove selected">remove selected</a>
+					</li>
+				</ul>
+				<div id="animate-pattern-storage"></div>
+			</div>
+<!-- Modes  -->
+			<div class="pattern-modes">
+				<p class="gfxp-tips">
+					You must import 'lib/gfxp' to use this function:
+				</p>
+				<p class="code-preview">
+					<span class="string">gfxp.set('white')</span>
+					<span class="pattern-code-copy">click to copy</span>
+					<span class="pattern-code-copied">copied</span>
+				</p>
+				<ul class="modes">
+					<li class="gfxp active"><a href="#" class="js-mode-button" data-mode="gfxp" title="gfxp">gfxp</a></li>
+					<li class="gfxp"><a href="#" class="js-mode-button" data-mode="gfxp-animate" title="gfxp.animate">animate</a></li>
+					<li><a href="#" class="js-mode-button" data-mode="table" title="lua table">table</a></li>
+					<li><a href="#" class="js-mode-button" data-mode="pdshort" title="playdate short string">playdate short</a></li>
+					<li><a href="#" class="js-mode-button" data-mode="pdfull" title="laydate full string">playdate full</a></li>
+					<li><a href="#" class="js-mode-button" data-mode="share" title="link to pattern">share</a></li>
+				</ul>			
+				<textarea class="clipboard-code">gfxp.set('white')</textarea>
+			</div>
+<!-- Lib -->
+			<div class="gfxp-patterns">
+					GFXP patterns <span class="counter gray"></span>
+					<ul id="gfxp-lib">
+						<!-- <li>Sample name<a href="#" class="pattern-item"></a></li> -->
+					</ul>
+			</div>
+<!-- Footer -->
+			<footer>
+				Code licensed under <a href="https://github.com/framework7io/framework7/blob/master/LICENSE" target="_blank">MIT</a><br>
+				<a href="https://play.date/" target="_blank">Playdate</a> is a trademark of <a href="https://panic.com/" target="_blank">Panic</a><br>
+				2020 © GFXP is brought to you by <a href="https://github.com/ivansergeev" target="_blank">Ivan Sergeev</a><br>
+			</footer>
+		</div>
+	</div>
+</body>
+</html>

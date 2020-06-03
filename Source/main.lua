@@ -108,7 +108,9 @@ init()
 -- Buttons
 
 function playdate.AButtonUp()
-	showLabel = not showLabel
+	if currentView == 1 then
+		showLabel = not showLabel
+	end
 end
 
 function playdate.BButtonUp()

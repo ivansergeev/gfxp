@@ -33,7 +33,7 @@ Without a device you can view gfxp-demo.gif
 
 Online version: [GFXP Editor](http://www.ivansergeev.com/gfxp/){:target="_blank"}
 
-Local / offline version: open gfxp-editor.html from the "Tools" folder in any modern browser.
+Local / offline version: open "index.html" from the "Editor/dist/" folder in any modern browser. The folder with images is required.
 
 ### Using GFXP lib
 
@@ -45,7 +45,7 @@ import 'lib/gfxp'
 
 ### Use cases GFXP lib
 
-The library includes 111 ready-made patterns. To use any of them, all you need is to indicate its name.
+The library includes 117 ready-made patterns. To use any of them, all you need is to indicate its name.
 
 Option 1:
 
@@ -222,7 +222,7 @@ Example:
 ```
 	function playdate.update()
 		a:draw()
-		playdate.graphics.fillRect(0, 0, 200, 120) -- for example
+		playdate.graphics.fillRect(0, 0, 200, 120)
 	end
 ```
 
