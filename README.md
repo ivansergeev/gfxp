@@ -1,6 +1,6 @@
 # GFXP
 
-GFXP is a small library with a collection of patterns for Panic Playdate. Includes a visual [GFXP Editor](http://www.ivansergeev.com/gfxp/){:target="_blank"} for modern browsers (no internet required) for quickly creating and using patterns.
+GFXP is a small library with a collection of patterns for Panic Playdate. Includes a visual [GFXP Editor](http://www.ivansergeev.com/gfxp/){target="_blank"} for modern browsers (no internet required) for quickly creating and using patterns.
 
 - Draw something in the visual editor and see the finished patterns
 - Copy the pattern in any code format or download PNG (for design and programming) or share it with your friends
@@ -31,7 +31,7 @@ Without a device you can view gfxp-demo.gif
 
 ### Using GFXP Editor
 
-Online version: [GFXP Editor](http://www.ivansergeev.com/gfxp/){:target="_blank"}
+Online version: [GFXP Editor](http://www.ivansergeev.com/gfxp/){target="_blank"}
 
 Local / offline version: open "index.html" from the "Editor/dist/" folder in any modern browser. The folder with images is required.
 
