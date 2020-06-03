@@ -139,9 +139,6 @@ export class Editor extends App{
 		this.emitter.emit('update-pattern', this.pattern);
 		this.emitter.emit('update-preview', {patternFileId: patternFileId});
 		this.emitter.emit('set-code', hexArray.join(', '));
-		
-		// updatePatternCode(hexArray.join(', '));
-		// updateCurrentAnimatePatternSample(patternArray.slice(0));
 	}
 
 	getCanvas() {

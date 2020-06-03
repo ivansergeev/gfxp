@@ -1,5 +1,4 @@
 import {App} from './../app.js';
-import {Editor} from './editor.js';
 
 export class Animate extends App{
 	

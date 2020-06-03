@@ -138,10 +138,7 @@ export class Modes extends App{
 		}else{
 			this.emitter.emit('show-animate', false);
 		}
-		
-		// animateContainer.classList.add('show');
-		// animateContainer.classList.remove('show');
-		
+
 		document.querySelectorAll('div.pattern-modes a.js-mode-button').forEach(el => el.parentNode.classList.remove('active'));
 			
 		e.target.parentNode.classList.add('active');
