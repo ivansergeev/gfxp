@@ -37,6 +37,8 @@ Local / offline version: open "index.html" from the "Editor/dist" folder in any 
 
 ### Using GFXP lib
 
+! The source code is temporarily closed. You can request it in the Discord.
+
 Before you begin, import "gfxp.lua" from "Source/lib" folder into the source folder of your project.
 
 ```
