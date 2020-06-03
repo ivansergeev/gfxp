@@ -26,7 +26,7 @@ GFXP is a small library with a collection of patterns for Panic Playdate. Includ
 
 ### Demo
 
-Run GFXP.pdx on your Playdate device or in your Playdate Simulator.
+Build project from "Source" folder and run "GFXP.pdx" on your Playdate device or in your Playdate Simulator.
 
 Without a device you can view gfxp-demo.gif
 
