@@ -40,6 +40,8 @@ Local / offline version: open gfxp-editor.html from the 'Tools' folder in any mo
 
 ### Using GFXP lib
 
+! The source code is temporarily closed. You can request it in the Discord.
+
 Before you begin, import 'gfxp.lua' from 'Source/helpers/' folder into the source folder of your project.
 
 ```sh
