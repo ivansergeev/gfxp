@@ -25,19 +25,19 @@ GFXP is a small library with a collection of patterns for Panic Playdate. Includ
 
 ### Demo
 
-Run GFXP.pdx on your Playdate device or in your Playdate Simulator.
+Build project from "Source" folder and run "GFXP.pdx" on your Playdate device or in your Playdate Simulator.
 
-Without a device you can view gfxp-demo.gif
+Or you can view gfxp-demo.gif
 
 ### Using GFXP Editor
 
 Online version: [GFXP Editor](http://www.ivansergeev.com/gfxp/){:target="_blank"}
 
-Local / offline version: open "index.html" from the "Editor/dist/" folder in any modern browser. The folder with images is required.
+Local / offline version: open "index.html" from the "Editor/dist" folder in any modern browser. The folder with images is required.
 
 ### Using GFXP lib
 
-Before you begin, import "gfxp.lua" from "Source/lib/" folder into the source folder of your project.
+Before you begin, import "gfxp.lua" from "Source/lib" folder into the source folder of your project.
 
 ```
 import 'lib/gfxp'
