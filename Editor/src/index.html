@@ -64,9 +64,14 @@
 			</div>
 <!-- Animate -->
 			<div class="animate-container">
-				Animate 
+				Animate
 				<a href="#" id="animate-control-stop" class="js-animate-control-button hidden" data-mode="stop" title="">stop</a>
 				<a href="#" id="animate-control-play" class="js-animate-control-button hidden" data-mode="play" title="">play</a>
+				<div id="animate-control-ticks">
+					every
+					<input type="text" name="animate-ticks" value="" min="1" max="999" pattern="^(([1-9])|([1-9]\d{0,2}))$" alt="less is faster, more is slower" maxlength="3" minlength="1">
+					ticks (30 fps)
+				</div>
 				<ul id="animate-list">
 					<li><a href="#" class="add-pattern">+</a></li>
 				</ul>

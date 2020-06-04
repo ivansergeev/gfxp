@@ -9,6 +9,8 @@ export class Animate extends App{
 		this.animateList = document.querySelector('#animate-list'),
 		this.playButtonAnimateControl = document.querySelector('#animate-control-play'),
 		this.stopButtonAnimateControl = document.querySelector('#animate-control-stop'),
+		this.ticksContainerAnimateControl = document.querySelector('#animate-control-ticks'),
+		this.ticksAnimateControl = document.querySelector('#animate-control-ticks > input'),
 		this.clearButtonAnimateControl = document.querySelector('#animate-control li.clear'),
 		this.removeButtonAnimateControl = document.querySelector('#animate-control li.remove'),
 		this.patternStorage = document.querySelector('#animate-pattern-storage');
@@ -28,7 +30,8 @@ export class Animate extends App{
 		this.selectedPatternId = -1,
 		this.selectedPatternIndex = -1,
 		this.id = 0,
-		this.isPlayed = false;
+		this.isPlayed = false,
+		this.ticks = 3;
 		
 		this.playInterval,
 		this.editorPatternCanvas,
@@ -38,7 +41,8 @@ export class Animate extends App{
 	init(app){	
 		
 		this.editor = app.getInstanceByName('editor');
-		
+		this.ticksAnimateControl.value = this.ticks;
+
 		this.emitter.on('show-animate', data => this.show(data));
 		this.emitter.on('update-pattern', data => this.updateSelectedPatternItem(data));
 		
@@ -49,8 +53,8 @@ export class Animate extends App{
 		document.querySelectorAll('#animate-control a.js-animate-control-button').forEach(el => el.addEventListener('click', e => this.onClickControlButtonHandler(e)));
 		
 		this.playButtonAnimateControl.addEventListener('click', e => this.onClickPlayButtonHandler(e));
-
 		this.stopButtonAnimateControl.addEventListener('click', e => this.onClickStopButtonHandler(e));
+		this.ticksAnimateControl.addEventListener('change', e => this.onChangeTicksHandler(e));
 		
 		this.editorPatternCanvas = this.editor.getCanvas();
 		
@@ -150,17 +154,37 @@ export class Animate extends App{
 	
 	onClickPlayButtonHandler(e) {
 		e.preventDefault();
-		
+		this.play();
+	}
+	
+	play() {
 		this.isPlayed = true;
 		this.playButtonAnimateControl.classList.add('hidden');
 		this.stopButtonAnimateControl.classList.remove('hidden');
 		
 		this.selectedPatternIndex = 0;
-		let s = 100;
+		let s = 1000/30 * this.ticks; // 30fps
 		
 		if(this.playInterval) clearInterval(this.playInterval);
-	
+		
 		this.playInterval = setInterval( () => this.setSelectedNextAnimatePatternItem(), s);
+	}
+	
+	onChangeTicksHandler(e) {
+		const val = this.ticksAnimateControl.value;
+
+		// 0, 01 — not accepted
+		if(/^(([1-9])|([1-9]\d{0,2}))$/.test(val)){
+			this.ticks = val;
+			
+			if(this.isPlayed){
+				clearInterval(this.playInterval);
+				this.play()
+			}
+			
+		}else{
+			this.ticksAnimateControl.value = this.ticks;	
+		}
 	}
 	
 	setSelectedNextAnimatePatternItem (){
@@ -244,10 +268,10 @@ export class Animate extends App{
 	showPlayControls(show) {
 		if(show){
 			this.stopButtonAnimateControl.classList.remove('hidden');
-			this.playButtonAnimateControl.classList.remove('hidden');			
+			this.playButtonAnimateControl.classList.remove('hidden');
 		}else{
 			this.stopButtonAnimateControl.classList.add('hidden');
-			this.playButtonAnimateControl.classList.add('hidden');	
+			this.playButtonAnimateControl.classList.add('hidden');
 		}
 	}
 	
