@@ -1,0 +1,83 @@
+div.animate-container
+	clear: both
+	display: none
+	position: relative
+	width: 100%
+	margin: 20px 0 0 0
+	padding: 0
+	text-align: center
+	// @extend %debug
+	
+	&.show
+		display: block
+		
+
+#animate-control-ticks
+	// display: inline
+	margin-top: 10px
+	
+	input
+		width: 25px
+		border: 0
+		border-bottom: 1px dotted gray
+		text-align: center
+		color: darkorange
+
+#animate-list 
+	display: flex
+	width: 100%
+	flex-direction: row
+	justify-content: center
+	flex-wrap: wrap
+	margin: 0
+	padding: 0
+				
+	li
+		// display: inline
+		width: 108px
+		height: 108px
+		margin: 6px
+		list-style: none
+		text-align: center
+
+		a 
+			display: block
+			width: 100px
+			height: 100px
+			margin: 5px auto 0 auto
+			border: 1px solid lightgray
+			
+			&.active 
+				margin-top: 2px
+				border: 4px solid darkorange
+
+			&.add-pattern
+				text-decoration: none
+				font-size: 50px
+				line-height: 95px
+				border: 1px dashed lightgray
+
+		canvas
+			width: 100px
+			height: 100px
+			background-color: #b1aea7
+
+#animate-control 
+	clear: both
+	display: block
+	margin: 20px auto 30px auto
+	padding: 0
+	text-align: center
+
+	li 
+		display: inline
+		list-style: none
+		text-align: center
+
+		&.hidden 
+			display: none
+
+#animate-pattern-storage
+	position: fixed
+	top: -20px
+	
