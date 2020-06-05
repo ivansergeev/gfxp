@@ -11,12 +11,17 @@ export class Editor extends App{
 		this.pattern = [];
 		this.mouseMove = false;
 		this.firstPixelColor = true;
+		this.updateCode = true;
+		this.animateMode = false;
 		this.gridItems;
 		this.previousGridItem;
 	}	
 	
 	init(app){
 		this.emitter.on('set-pattern', data => this.setPattern(data));
+		this.emitter.on('animate-play', () => this.updateCode = false);
+		this.emitter.on('animate-stop', () => this.updateCode = true);
+		this.emitter.on('show-animate', status => this.animateMode = status);
 
 		// grid
 		let html = '';
@@ -138,7 +143,16 @@ export class Editor extends App{
 
 		this.emitter.emit('update-pattern', this.pattern);
 		this.emitter.emit('update-preview', {patternFileId: patternFileId});
-		this.emitter.emit('set-code', hexArray.join(', '));
+		
+		if(this.updateCode){
+			this.emitter.emit('update-animate-code', hexArray.join(', '));
+			
+			if(this.animateMode){
+				this.emitter.emit('set-code', this.appComponents.animate.getCode());
+			}else{
+				this.emitter.emit('set-code', hexArray.join(', '));
+			}
+		}
 	}
 
 	getCanvas() {

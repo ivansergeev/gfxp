@@ -21,13 +21,13 @@ export class App{
 			 item = comp[i].init(this);
 			 this.components[item.name] = item.instance;
 		}
-
+		
+		for(let i in this.components){
+			this.components[i].appComponents =  this.components;
+		}
+		
 		document.querySelector('div.loading').classList.add('hidden');
 		
 		['div.design-container', 'div.pattern-modes', 'div.gfxp-patterns'].forEach(el => document.querySelector(el).classList.add('show'));
-	}
-	
-	getInstanceByName(name) {
-		return this.components[name];
 	}
 }

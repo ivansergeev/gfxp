@@ -7,9 +7,14 @@ export class GFXPLib extends App{
 		super();
 
 		this.gfxpLib = document.querySelector('#gfxp-lib');
+		this.updatePattern = true;
 	}	
 	
-	init(app){		
+	init(app){
+		
+		this.emitter.on('animate-play', () => this.updatePattern = false);
+		this.emitter.on('animate-stop', () => this.updatePattern = true);
+		
 		let sortedItems = Object.keys(GFXP).map(function(key) {
 			return {name: key};
 		});
@@ -34,6 +39,9 @@ export class GFXPLib extends App{
 	
 	onClickGFXPLibItemHandler(e) {
 		e.preventDefault();
+		
+		if(!this.updatePattern) return;
+		
 		window.scrollTo(0, 0);
 	
 		let rowdata = GFXP[e.target.dataset.name],

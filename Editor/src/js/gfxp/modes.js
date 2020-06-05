@@ -15,13 +15,14 @@ export class Modes extends App{
 
 		this.mode = 'gfxp',
 		this.patternCode = '0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF',
+		this.animatePatternCode = '',
 		this.patternCodeCopiedTimeout,
 		this.animatePatterns = [];
 	}
 	
 	init(app){
 		this.emitter.on('set-code', data => this.update(data));
-	
+		
 		document.querySelector('div.pattern-modes > p.code-preview').addEventListener('click', e => this.copyCodeToClipboard(e));
 
 		document.querySelectorAll('div.pattern-modes a.js-mode-button').forEach(el => el.addEventListener('click', e => this.onClickModeButtonHandler(e)));
@@ -72,33 +73,48 @@ export class Modes extends App{
 	
 	update(val) {
 		
-		this.patternCode = val;
+		if(this.mode !== 'gfxp-animate') this.patternCode = val;
 
-		let str = '';
+		let str, code = '';
 
 		switch (this.mode) {
 			case 'gfxp':
 				let item = this.searchGFXPItem(this.patternCode);
 				
-				str = 'gfxp.set(' + 
+				str = code = 'local gfxp = GFXP\n' + 'gfxp.set(' + 
 					((item !== '')? '\'' + item + '\'': '{' + this.patternCode + '}')
 				 + ')';
+				 str = str.replace(/\n/g,'<br>');
 				break;
 			
 			case 'gfxp-animate':
-				str = 'coming soon';
+				
+				this.animatePatternCode = 'local gfxp = GFXP\n' + 
+					'local patterns = {' +
+						(val? '\n':'') +
+						val +
+					'}\n\n' +
+					'local animate = gfxp.animate:new(patterns, ' + this.appComponents.animate.ticks + ')\n\n' +
+					'function playdate.update()\n' +
+						'\tanimate:draw()\n' +
+						'\t-- draw something here, for example\n' +
+						'\t-- playdate.graphics.fillCircleAtPoint(200, 120, 100)\n' +
+					'end';
+
+				code = this.animatePatternCode;
+				str = code.replace(/\n/g,'<br>').replace(/(\},)/g,'},<br>');
 				break;
 
 			case 'table':
-				str = '{' + this.patternCode + '}';
+				str = code = '{' + this.patternCode + '}';
 				break;
 
 			case 'pdshort':
-				str = 'gfx.setPattern({'+ this.patternCode +'})';
+				str = code = 'gfx.setPattern({'+ this.patternCode +'})';
 				break;
 
 			case 'pdfull':
-				str = 'playdate.graphics.setPattern({'+ this.patternCode +'})';
+				str = code = 'playdate.graphics.setPattern({'+ this.patternCode +'})';
 				break;
 
 			case 'share':
@@ -106,12 +122,12 @@ export class Modes extends App{
 				q = q.replace(/(0x)/g,'');
 				q = q.replace(/,/g,'-');
 				
-				str = 'http://ivansergeev.com/gfxp/?p=' + q;
+				str = code = 'http://ivansergeev.com/gfxp/?p=' + q;
 				break;
 		}
 
-		this.patternCodePreview.innerHTML =
-		this.hiddenClipboardCode.value = str;
+		this.patternCodePreview.innerHTML = str;
+		this.hiddenClipboardCode.value = code;
 	}
 			
 	searchGFXPItem (val) {
@@ -142,7 +158,13 @@ export class Modes extends App{
 		document.querySelectorAll('div.pattern-modes a.js-mode-button').forEach(el => el.parentNode.classList.remove('active'));
 			
 		e.target.parentNode.classList.add('active');
-		this.update(this.patternCode);
+		
+		if(this.mode !== 'gfxp-animate'){
+			this.update(this.patternCode);
+		}else{
+			this.update(this.appComponents.animate.getCode());
+		}
+		
 	}
 			
 	copyCodeToClipboard(e) {
@@ -163,5 +185,9 @@ export class Modes extends App{
 			this.patternCodeCopied.classList.remove('show');
 			this.patternCodeCopy.classList.remove('hide');
 		}, 1000);
+	}
+	
+	getPatternCode() {
+		return this.patternCode;
 	}
 }

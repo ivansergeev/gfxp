@@ -25,7 +25,8 @@ export class Animate extends App{
 			[,1,1,1,1,1,1,1,1],
 			[,1,1,1,1,1,1,1,1],
 			[,1,1,1,1,1,1,1,1],
-		];
+		],
+		this.defaultCode = '0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF';
 		
 		this.selectedPatternId = -1,
 		this.selectedPatternIndex = -1,
@@ -33,18 +34,16 @@ export class Animate extends App{
 		this.isPlayed = false,
 		this.ticks = 3;
 		
-		this.playInterval,
-		this.editorPatternCanvas,
-		this.editor;
+		this.playInterval;
 	}	
 	
 	init(app){	
-		
-		this.editor = app.getInstanceByName('editor');
+
 		this.ticksAnimateControl.value = this.ticks;
 
 		this.emitter.on('show-animate', data => this.show(data));
 		this.emitter.on('update-pattern', data => this.updateSelectedPatternItem(data));
+		this.emitter.on('update-animate-code', data => this.updateCode(data));
 		
 		document.querySelectorAll('#animate-list a.pattern-item').forEach(el => el.addEventListener('click', e => this.onClickItemHandler(e)));
 		
@@ -56,14 +55,13 @@ export class Animate extends App{
 		this.stopButtonAnimateControl.addEventListener('click', e => this.onClickStopButtonHandler(e));
 		this.ticksAnimateControl.addEventListener('change', e => this.onChangeTicksHandler(e));
 		
-		this.editorPatternCanvas = this.editor.getCanvas();
-		
 		return {name: 'animate', instance: this};
 	}
 	
 	show (visible) {
 		if(visible){
 			this.animateContainer.classList.add('show');
+			this.emitter.emit('set-code', this.getCode());
 		}else{
 			this.animateContainer.classList.remove('show');
 		}
@@ -103,9 +101,7 @@ export class Animate extends App{
 			canvas = document.querySelector('#animate-pattern-canvas-' + id);
 
 		item.addEventListener('click', e => this.onClickItemHandler(e));
-		
-		// animateObserver.observe(item.parentNode, {attributes: true});
-		
+
 		this.animateArray[id] = {
 			id: id,
 			target: item,
@@ -114,7 +110,8 @@ export class Animate extends App{
 			preview: preview,
 			previewContext: preview.getContext('2d'),
 			data: [],
-			active: true
+			active: true,
+			code: this.defaultCode
 		};
 		
 		if(this.animateArray.length > 1 && this.isPlayed == false){
@@ -124,15 +121,17 @@ export class Animate extends App{
 		if(this.selectedPatternId == -1){
 			this.selectedPatternId = id;
 			this.selectedPatternIndex = this.animateArray.indexOf(id);
-			this.updateSelectedPatternItem(this.editor.getPattern());
+			this.animateArray[id].code = this.appComponents.modes.getPatternCode();
+			this.updateSelectedPatternItem(this.appComponents.editor.getPattern());
 			
 			item.classList.add('active');
+			
 		}else{
 			this.animateArray[id].data = JSON.parse(JSON.stringify(this.defaultWhiteArray));
 		}
 
 		this.showItemControls(true);
-
+		this.emitter.emit('set-code', this.getCode());
 		this.id++;
 		
 		return false;
@@ -158,6 +157,9 @@ export class Animate extends App{
 	}
 	
 	play() {
+		this.emitter.emit('animate-play');
+		this.showItemControls(false);
+		
 		this.isPlayed = true;
 		this.playButtonAnimateControl.classList.add('hidden');
 		this.stopButtonAnimateControl.classList.remove('hidden');
@@ -182,6 +184,8 @@ export class Animate extends App{
 				this.play()
 			}
 			
+			this.emitter.emit('set-code', this.getCode());
+			
 		}else{
 			this.ticksAnimateControl.value = this.ticks;	
 		}
@@ -189,8 +193,6 @@ export class Animate extends App{
 	
 	setSelectedNextAnimatePatternItem (){
 
-		// const index = this.animateArray.indexOf(this.selectedPatternId);
-		// this.selectedPatternIndex = (this.selectedPatternIndex + 1) % this.animateArray.length;
 		this.selectedPatternIndex = this.getNextActivePatternIndex(this.selectedPatternIndex);
 
 		this.onClickItemHandler({
@@ -207,6 +209,9 @@ export class Animate extends App{
 	onClickStopButtonHandler(e) {
 		e.preventDefault();
 		
+		this.emitter.emit('animate-stop');
+		this.showItemControls(true);
+		
 		this.isPlayed = false;
 		this.stopButtonAnimateControl.classList.add('hidden');
 		this.playButtonAnimateControl.classList.remove('hidden');
@@ -215,9 +220,6 @@ export class Animate extends App{
 	
 	removeSelected() {
 		if(this.selectedPatternId >= 0){
-			
-			// const index = this.animateArray.indexOf(this.selectedPatternId);
-			// this.animateArray.splice(index, 1);
 
 			const item = this.animateArray[this.selectedPatternId].target;
 			item.parentNode.classList.add('hidden');
@@ -243,6 +245,8 @@ export class Animate extends App{
 			}else if(active == 1){
 				this.showPlayControls(false);
 			}
+			
+			this.emitter.emit('set-code', this.getCode());
 		}
 	}
 	
@@ -263,6 +267,8 @@ export class Animate extends App{
 		
 		this.showPlayControls(false);
 		this.showItemControls(false);
+		
+		this.emitter.emit('set-code', this.getCode());
 	};
 
 	showPlayControls(show) {
@@ -293,27 +299,26 @@ export class Animate extends App{
 			
 			this.animateArray[id].data = JSON.parse(JSON.stringify(data));
 
-			let previewContext = this.animateArray[id].previewContext;
+			const previewContext = this.animateArray[id].previewContext;
+			const editorCanvas = this.appComponents.editor.getCanvas();
 			previewContext.rect(0, 0, 100, 100);
-			previewContext.fillStyle = previewContext.createPattern(this.editorPatternCanvas, 'repeat');
+			previewContext.fillStyle = previewContext.createPattern(editorCanvas, 'repeat');
 			previewContext.fill();
-			this.animateArray[id].context.drawImage(this.editorPatternCanvas, 0, 0);
+			this.animateArray[id].context.drawImage(editorCanvas, 0, 0);
 		}
 	}
+	
+	updateCode(val) {
+		let id = this.selectedPatternId;
+		
+		if(id >= 0 && this.animateArray[id]){
+			this.animateArray[id].code = val;
+		}
+	}
+	
+	getCode() {
+		return this.animateArray.map( (item) => (item.active)? '{' + item.code + '},':'').join('');
+	}
 }
-
-
-
-// const animateObserver = new MutationObserver(function(mutations) {
-// 	mutations.forEach(function(mutation) {
-// 		if (mutation.type === 'attributes') {
-// 			
-// 			if(mutation.target.classList.contains('active')){
-// 				mutation.target.dataset.id;
-// 			}
-// 		}
-// 	});
-// });
-
 
 

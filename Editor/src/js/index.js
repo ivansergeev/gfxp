@@ -10,7 +10,7 @@ const app = new App();
 window.onload = app.init([
 							new Editor(),
 							new Preview(),
-							new Modes(),
 							new Animate(),
+							new Modes(),
 							new GFXPLib(),
 						]);
