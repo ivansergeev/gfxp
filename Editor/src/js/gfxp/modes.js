@@ -11,7 +11,10 @@ export class Modes extends App{
 		this.hiddenClipboardCode = document.querySelector('div.pattern-modes > textarea.clipboard-code'),
 		this.patternCodeCopy = document.querySelector('div.pattern-modes > p.code-preview > span.pattern-code-copy');
 		this.patternCodeCopied = document.querySelector('div.pattern-modes > p.code-preview > span.pattern-code-copied'),
-		this.gfxpTips = document.querySelector('div.pattern-modes  p.gfxp-tips');
+		this.gfxpTips = document.querySelector('div.pattern-modes  p.gfxp-tips'),
+		this.binaryTips = document.querySelector('div.pattern-modes  p.binary-tips'),
+		this.binaryTipsInput = document.querySelector('div.pattern-modes  p.binary-tips input.function-name'),
+		this.binaryTipsHiddenText = document.querySelector('div.pattern-modes  p.binary-tips span.function-name');
 
 		this.mode = 'gfxp',
 		this.patternCode = '0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF',
@@ -26,6 +29,11 @@ export class Modes extends App{
 		document.querySelector('div.pattern-modes > p.code-preview').addEventListener('click', e => this.copyCodeToClipboard(e));
 
 		document.querySelectorAll('div.pattern-modes a.js-mode-button').forEach(el => el.addEventListener('click', e => this.onClickModeButtonHandler(e)));
+		
+		this.onChangeBinaryFunctionNameHandler();
+
+		['change','keydown','paste','input'].forEach(evt => 
+		this.binaryTipsInput.addEventListener(evt, e => this.onChangeBinaryFunctionNameHandler(e)));
 
 		this.initShare();
 		
@@ -116,6 +124,20 @@ export class Modes extends App{
 			case 'pdfull':
 				str = code = 'playdate.graphics.setPattern({'+ this.patternCode +'})';
 				break;
+				
+			case 'binary':
+				
+				const funcName = this.binaryTipsInput.value;
+				let patternCodeArray = this.patternCode.split(', ');
+				
+				str = code = 'local pattern = {\n' +
+								patternCodeArray.map(val =>
+									'\t' + funcName + '(\'' + this.bin2dec(val) + '\')'
+								).join(',\n') +
+							 ',\n}';
+
+				str = code.replace(/\n/g,'<br>');
+				break;
 
 			case 'share':
 				let q = this.patternCode.replace(/\s/g,'');
@@ -129,7 +151,7 @@ export class Modes extends App{
 		this.patternCodePreview.innerHTML = str;
 		this.hiddenClipboardCode.value = code;
 	}
-			
+
 	searchGFXPItem (val) {
 
 		val = val.split(', ').map(val => parseInt(val, 16)).join('')
@@ -149,6 +171,10 @@ export class Modes extends App{
 		if(this.mode === 'gfxp' || this.mode === 'gfxp-animate') this.gfxpTips.classList.remove('hidden');
 		else this.gfxpTips.classList.add('hidden');
 		
+		if(this.mode === 'binary') this.binaryTips.classList.remove('hidden');
+		else this.binaryTips.classList.add('hidden');
+		
+		
 		if(this.mode === 'gfxp-animate'){
 			this.emitter.emit('show-animate', true);
 		}else{
@@ -167,6 +193,23 @@ export class Modes extends App{
 		
 	}
 			
+	onChangeBinaryFunctionNameHandler(e) {
+		
+		let str = this.binaryTipsInput.value;
+		
+		if(str === '' || str === 'undefined'){
+			str = 'bin2num';
+			this.binaryTipsInput.value = str;
+		}
+
+		this.binaryTipsHiddenText.innerText = str;
+
+		if(this.binaryTipsHiddenText.offsetWidth > 0){
+			this.binaryTipsInput.style.width = (this.binaryTipsHiddenText.offsetWidth + 5) + 'px';
+			this.update(this.patternCode);
+		}
+	}
+	
 	copyCodeToClipboard(e) {
 		e.preventDefault();
 		
@@ -189,5 +232,11 @@ export class Modes extends App{
 	
 	getPatternCode() {
 		return this.patternCode;
+	}
+	
+	
+	
+	bin2dec (hex){
+		return (parseInt(hex, 16).toString(2)).padStart(8, '0');
 	}
 }

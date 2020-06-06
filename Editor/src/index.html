@@ -89,7 +89,12 @@
 <!-- Modes  -->
 			<div class="pattern-modes">
 				<p class="gfxp-tips">
-					You must import 'lib/gfxp' to use this function:
+					You need to import 'lib/gfxp' to use this function:
+				</p>
+				<p class="binary-tips hidden">
+					You need to use the conversion function, binary string to number:<br><br>
+					function <input type="text" class="function-name" value="bin2num" pattern="" alt="you can change the function name" minlength="1" maxlength="20" >(str) return tonumber(str, 2) end<br>
+					<span class="function-name">bin2num</span>
 				</p>
 				<p class="code-preview">
 					<span class="string">
@@ -103,8 +108,9 @@
 					<li class="gfxp active"><a href="#" class="js-mode-button" data-mode="gfxp" title="gfxp">gfxp</a></li>
 					<li class="gfxp"><a href="#" class="js-mode-button" data-mode="gfxp-animate" title="gfxp.animate">animate</a></li>
 					<li><a href="#" class="js-mode-button" data-mode="table" title="lua table">table</a></li>
-					<li><a href="#" class="js-mode-button" data-mode="pdshort" title="playdate short string">playdate short</a></li>
-					<li><a href="#" class="js-mode-button" data-mode="pdfull" title="laydate full string">playdate full</a></li>
+					<li><a href="#" class="js-mode-button" data-mode="pdshort" title="Playdate short string">playdate short</a></li>
+					<li><a href="#" class="js-mode-button" data-mode="pdfull" title="Playdate full string">playdate full</a></li>
+					<li><a href="#" class="js-mode-button" data-mode="binary" title="binary string">binary</a></li>
 					<li><a href="#" class="js-mode-button" data-mode="share" title="link to pattern">share</a></li>
 				</ul>			
 				<textarea class="clipboard-code">gfxp.set('white')</textarea>
