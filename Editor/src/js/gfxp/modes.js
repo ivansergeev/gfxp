@@ -12,6 +12,7 @@ export class Modes extends App{
 		this.patternCodeCopy = document.querySelector('div.pattern-modes > p.code-preview > span.pattern-code-copy');
 		this.patternCodeCopied = document.querySelector('div.pattern-modes > p.code-preview > span.pattern-code-copied'),
 		this.gfxpTips = document.querySelector('div.pattern-modes  p.gfxp-tips'),
+		this.addMask = document.querySelector('div.pattern-modes  p.add-mask'),
 		this.binaryTips = document.querySelector('div.pattern-modes  p.binary-tips'),
 		this.binaryTipsInput = document.querySelector('div.pattern-modes  p.binary-tips input.function-name'),
 		this.binaryTipsHiddenText = document.querySelector('div.pattern-modes  p.binary-tips span.function-name');
@@ -21,6 +22,7 @@ export class Modes extends App{
 		this.animatePatternCode = '',
 		this.patternCodeCopiedTimeout,
 		this.animatePatterns = [];
+		this.mask = false;
 	}
 	
 	init(app){
@@ -29,6 +31,9 @@ export class Modes extends App{
 		document.querySelector('div.pattern-modes > p.code-preview').addEventListener('click', e => this.copyCodeToClipboard(e));
 
 		document.querySelectorAll('div.pattern-modes a.js-mode-button').forEach(el => el.addEventListener('click', e => this.onClickModeButtonHandler(e)));
+		
+		document.querySelectorAll('div.pattern-modes a.js-add-mask-button').forEach(el => el.addEventListener('click', e => this.onClickAddMaskButtonHandler(e)));
+		
 		
 		this.onChangeBinaryFunctionNameHandler();
 
@@ -82,7 +87,13 @@ export class Modes extends App{
 	update(val) {
 		
 		if(this.mode !== 'gfxp-animate') this.patternCode = val;
-
+		
+		var invertedPatternCode = '';
+		
+		if(this.mask && (this.mode === 'table' || this.mode === 'pdshort' || this.mode === 'pdfull')){
+			invertedPatternCode = ', ' + this.invertPattern(this.patternCode)
+		}
+		
 		let str, code = '';
 
 		switch (this.mode) {
@@ -114,19 +125,19 @@ export class Modes extends App{
 				break;
 
 			case 'table':
-				str = code = '{' + this.patternCode + '}';
+				str = code = '{' + this.patternCode + invertedPatternCode +'}';
 				break;
 
 			case 'pdshort':
-				str = code = 'gfx.setPattern({'+ this.patternCode +'})';
+				str = code = 'gfx.setPattern({'+ this.patternCode + invertedPatternCode +'})';
 				break;
 
 			case 'pdfull':
-				str = code = 'playdate.graphics.setPattern({'+ this.patternCode +'})';
+				str = code = 'playdate.graphics.setPattern({'+ this.patternCode + invertedPatternCode + '})';
 				break;
 				
 			case 'binary':
-				
+
 				const funcName = this.binaryTipsInput.value;
 				let patternCodeArray = this.patternCode.split(', ');
 				
@@ -164,17 +175,21 @@ export class Modes extends App{
 	}
 			
 	onClickModeButtonHandler(e) {
-		
+
 		e.preventDefault();
 		this.mode = e.target.dataset.mode;
-		
+
 		if(this.mode === 'gfxp' || this.mode === 'gfxp-animate') this.gfxpTips.classList.remove('hidden');
 		else this.gfxpTips.classList.add('hidden');
 		
+		if(this.mode === 'table' || this.mode === 'pdshort' || this.mode === 'pdfull')
+			this.addMask.classList.remove('hidden');
+		else
+			this.addMask.classList.add('hidden');
+		
 		if(this.mode === 'binary') this.binaryTips.classList.remove('hidden');
 		else this.binaryTips.classList.add('hidden');
-		
-		
+
 		if(this.mode === 'gfxp-animate'){
 			this.emitter.emit('show-animate', true);
 		}else{
@@ -182,17 +197,32 @@ export class Modes extends App{
 		}
 
 		document.querySelectorAll('div.pattern-modes a.js-mode-button').forEach(el => el.parentNode.classList.remove('active'));
-			
+
 		e.target.parentNode.classList.add('active');
-		
+
 		if(this.mode !== 'gfxp-animate'){
 			this.update(this.patternCode);
 		}else{
 			this.update(this.appComponents.animate.getCode());
 		}
-		
 	}
-			
+	
+	onClickAddMaskButtonHandler(e) {
+		
+		e.preventDefault();
+		this.mask = !(e.target.dataset.mode === 'on')
+
+		if (this.mask){
+			document.querySelector('div.pattern-modes a.js-add-mask-button.on').classList.remove('hidden');
+			document.querySelector('div.pattern-modes a.js-add-mask-button.off').classList.add('hidden');
+		}else{
+			document.querySelector('div.pattern-modes a.js-add-mask-button.on').classList.add('hidden');
+			document.querySelector('div.pattern-modes a.js-add-mask-button.off').classList.remove('hidden');
+		}
+		
+		this.update(this.patternCode)
+	}
+	
 	onChangeBinaryFunctionNameHandler(e) {
 		
 		let str = this.binaryTipsInput.value;
@@ -234,7 +264,9 @@ export class Modes extends App{
 		return this.patternCode;
 	}
 	
-	
+	invertPattern(pattern) {
+		return pattern.split(', ').map(val => 0xFF - val).join(', ')
+	}
 	
 	bin2dec (hex){
 		return (parseInt(hex, 16).toString(2)).padStart(8, '0');
