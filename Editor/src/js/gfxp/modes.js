@@ -155,7 +155,7 @@ export class Modes extends App{
 				q = q.replace(/(0x)/g,'');
 				q = q.replace(/,/g,'-');
 				
-				str = code = 'http://ivansergeev.com/gfxp/?p=' + q;
+				str = code = 'https://ivansergeev.com/gfxp/?p=' + q;
 				break;
 		}
 
