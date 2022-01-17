@@ -24,9 +24,11 @@ GFXP is a small library with a collection of patterns for Panic Playdate console
 - Emojis
 - Misc
 
+
 ### Demo
 
 Build project from `Source` folder and run `GFXP.pdx` on your Playdate console or in your Playdate Simulator.
+
 
 ### Using GFXP Editor
 
@@ -43,6 +45,7 @@ import 'lib/gfxp'
 
 It is enough to do this once, for example in `main.lua`
 
+
 ### Use cases GFXP lib
 
 The library includes 136 ready-made patterns (w/o inverted versions). To use any of them, all you need is to indicate its name.
@@ -51,38 +54,38 @@ In any file with your code:
 ###### Option 1:
 Declare a local variable
 ```
-    local gfxp <const> = GFXP
+local gfxp <const> = GFXP
 ```
 then specify the name of the pattern
 ```
-    gfxp.set('gray')
+gfxp.set('gray')
 ```
 or
 ```
-	gfxp.set('dot-1')
+gfxp.set('dot-1')
 ```
 or the inverted version, just add an `i` at the end, for example:
 ```
-	gfxp.set('dot-1i')
+gfxp.set('dot-1i')
 ```
 or a custom pattern table
 ```
-    gfxp.set({0x55, 0xAA, 0x55, 0xAA, 0x55, 0xAA, 0x55, 0xAA})
+gfxp.set({0x55, 0xAA, 0x55, 0xAA, 0x55, 0xAA, 0x55, 0xAA})
 ```
 or with mask
 ```
-    gfxp.set({0x55, 0xAA, 0x55, 0xAA, 0x55, 0xAA, 0x55, 0xAA, 170, 85, 170, 85, 170, 85, 170, 85})
+gfxp.set({0x55, 0xAA, 0x55, 0xAA, 0x55, 0xAA, 0x55, 0xAA, 170, 85, 170, 85, 170, 85, 170, 85})
 ```
 
 
 ###### Option 2: set only
 Declare a local variable
 ```
-	local gfxp <const> = GFXP.set
+local gfxp <const> = GFXP.set
 ```
 then specify the name of the pattern
 ```
-    gfxp('dot-1')
+gfxp('dot-1')
 ```
 or a custom pattern table
 ```
