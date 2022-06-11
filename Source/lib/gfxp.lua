@@ -320,13 +320,13 @@ GFXP._transformByFlag = function (val)
 	local pattern = nil
 	
 	if (not flags) then
+		-- Pattern w/o id,'name-irt'
 		flags = string.match(val, '[a-z]-([irt]+)$')
 		suffix = 2
 	end
 	
 	if (flags) then
 		
-		-- Pattern w/o id,'name-irt'
 		pattern = GFXP.lib[val:sub(1, -(#flags + suffix))]
 
 		if (pattern) then
