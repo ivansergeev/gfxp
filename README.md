@@ -1,10 +1,9 @@
 # GFXP
 
-GFXP is a small library with a collection of patterns for Panic Playdate console. Includes a visual [GFXP Editor](https://dev.playdate.store/tools/gfxp/) for modern browsers for quickly creating and using patterns.
+GFXP is a small library with a collection of patterns for Panic Playdate console.
 
-- Draw something in the visual editor and see the finished patterns
-- Copy the pattern in any code format or download PNG (for design and programming) or share it with your friends
-- Easy! Simply! Magic!
+Online version: [GFXP Editor](https://dev.playdate.store/tools/gfxp/)
+Playdate app: [GFXP Viewer](https://playdate.store/app/1008/playdate-dither-viewer/), developed by Foster Douglas.
 
 ### Types of patterns that are included in the GFXP lib
 
@@ -28,11 +27,6 @@ GFXP is a small library with a collection of patterns for Panic Playdate console
 ### Demo
 
 Build project from `Source` folder and run `GFXP.pdx` on your Playdate console or in your Playdate Simulator.
-
-
-### Using GFXP Editor
-
-Online version: [GFXP Editor](https://dev.playdate.store/tools/gfxp/)
 
 
 ### Using GFXP lib
@@ -64,7 +58,7 @@ or
 ```
 gfxp.set('dot-1')
 ```
-or the inverted version, just add an `i` at the end, for example:
+or the inverted version (with transformation), just add an `i` at the end, for example:
 ```
 gfxp.set('dot-1i')
 ```
@@ -77,6 +71,14 @@ or with mask
 gfxp.set({0x55, 0xAA, 0x55, 0xAA, 0x55, 0xAA, 0x55, 0xAA, 170, 85, 170, 85, 170, 85, 170, 85})
 ```
 
+
+Available transformation flags for named patterns:
+
+`i` - Invert
+
+`r` - Random
+
+`t` - Transparency
 
 ###### Option 2: set only
 Declare a local variable

@@ -1,6 +1,6 @@
--- GFXP for Playdate (2.0.0)
+-- GFXP for Playdate (2.1.0)
 -- Lib: https://github.com/ivansergeev/gfxp
--- Pattern Editor: https://dev.playdate.store/tools/gfxp/
+-- GFXP Pattern Editor: https://dev.playdate.store/tools/gfxp/
 --
 -- The MIT License (MIT)
 --
@@ -72,62 +72,10 @@
 
 ]]--
 
+import 'CoreLibs/object'
 
 -- ! GFXP is a global variable
-
 GFXP = {}
-
-local gfxSetPattern <const> = playdate.graphics.setPattern
-
--- Caching of inverted patterns
-local caching <const> = true
-
--- Set pattern
----@param val string, table - pattern
-GFXP.set = function (val)
-
-	local pattern
-
-	if (type(val) == 'string') then
-
-		pattern = GFXP.lib[val]
-
-		if (not pattern) then
-
-			-- Check inverted pattern
-			local e = (string.find(val, '-i$') and -3) or (string.find(val, 'i$') and -2) or 0
-
-			pattern = GFXP.lib[val:sub(1, e)]
-
-			if (pattern) then
-				pattern = table.deepcopy(pattern)
-
-				-- Invert
-				for i = 1, #pattern do
-					pattern[i] = pattern[i] ~ 255
-				end
-
-				-- Caching
-				if (caching) then
-					GFXP.lib[val] = pattern
-				end
-
-			end
-		end
-
-	elseif (type(val) == 'table' and (#val == 8 or #val == 16)) then
-		pattern = val
-	end
-
-	-- Set pattern
-	if (pattern) then
-		gfxSetPattern(pattern)
-	else
-		error('GFXP: Unknown pattern. Value is "' .. val .. '" (' .. type(val) .. ')')
-	end
-
-end
-
 
 GFXP.lib = {
 	['white'] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
@@ -314,3 +262,111 @@ GFXP.lib = {
 	['pacman-1'] = {0xff, 0xe3, 0xdd, 0xbb, 0xb7, 0xbb, 0xdd, 0xe3},
 	['tree-1'] = {0xff, 0xf7, 0xeb, 0xf7, 0xc9, 0xf7, 0x88, 0xf7},
 }
+
+
+local gfxSetPattern <const> = playdate.graphics.setPattern
+
+-- Caching of inverted patterns
+local caching <const> = true
+
+
+-- Set pattern
+---@param val string, table - pattern
+GFXP.set = function (val)
+
+	local pattern
+
+	if (type(val) == 'string') then
+
+		pattern = GFXP.lib[val]
+
+		if (not pattern) then
+			
+			-- Finding transformation flags
+			if (string.find(val, '-?[irt]+$')) then
+				
+				pattern = GFXP._transformByFlag(val)
+				
+				-- Caching
+				if (caching and pattern) then
+					GFXP.lib[val] = pattern
+				end
+			end
+			
+		end
+
+	elseif (type(val) == 'table' and (#val == 8 or #val == 16)) then
+		pattern = val
+	end
+
+	-- Set pattern
+	if (pattern) then
+		gfxSetPattern(pattern)
+	else
+		print('GFXP: Unknown pattern. Value is "' .. val .. '" (' .. type(val) .. ')')
+	end
+
+end
+
+
+-- Transform pattern by flag
+---@param val string	- pattern name
+---@return table 		- pattern
+GFXP._transformByFlag = function (val)
+	
+	-- Pattern w/ id, 'name-1irt'
+	local flags = string.match(val, '[0-9]([irt]+)$')
+	local suffix = 1
+	local pattern = nil
+	
+	if (not flags) then
+		flags = string.match(val, '[a-z]-([irt]+)$')
+		suffix = 2
+	end
+	
+	if (flags) then
+		
+		-- Pattern w/o id,'name-irt'
+		pattern = GFXP.lib[val:sub(1, -(#flags + suffix))]
+
+		if (pattern) then
+
+			for flag in string.gmatch(flags, '%w') do
+				GFXP._transformations[flag](pattern)
+			end
+
+		end
+	end
+
+	return pattern
+end
+
+
+-- Transforms
+GFXP._transformations = {
+	
+	-- Invert 
+	---@param pattern table
+	i = function (pattern)
+		for i = 1, 8 do
+			pattern[i] = pattern[i] ~ 255
+		end
+	end,
+	
+	-- Random
+	---@param pattern table
+	r = function (pattern)
+		for i = 1, 8 do
+			pattern[i] = math.random(0, 255)
+		end
+	end,
+	
+	-- Transparency
+	---@param pattern table
+	t = function (pattern)
+		for i = 1, 8 do
+			table.insert(pattern, pattern[i] ~ 255)
+		end
+	end
+}
+
