@@ -318,6 +318,7 @@ GFXP._transformByFlag = function (val)
 	local flags = string.match(val, '[0-9]([irt]+)$')
 	local suffix = 1
 	local pattern = nil
+	local clone = nil
 	
 	if (not flags) then
 		-- Pattern w/o id,'name-irt'
@@ -330,11 +331,13 @@ GFXP._transformByFlag = function (val)
 		pattern = GFXP.lib[val:sub(1, -(#flags + suffix))]
 
 		if (pattern) then
-
+			clone = table.shallowcopy(pattern)
+			
 			for flag in string.gmatch(flags, '%w') do
-				GFXP._transformations[flag](pattern)
+				GFXP._transformations[flag](clone)
 			end
 
+			pattern = clone
 		end
 	end
 
