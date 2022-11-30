@@ -1,0 +1,5 @@
+{
+	"config": {
+		"lua_import": "Source/lib/gfxp.lua"
+	}
+}
