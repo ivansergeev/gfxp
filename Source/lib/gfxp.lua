@@ -1,4 +1,4 @@
--- GFXP for Playdate (2.1.0)
+-- GFXP for Playdate (2.2.0)
 -- Lib: https://github.com/ivansergeev/gfxp
 -- GFXP Pattern Editor: https://dev.playdate.store/tools/gfxp/
 --
