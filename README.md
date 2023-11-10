@@ -2,9 +2,9 @@
 
 GFXP is a small library with a collection of patterns for Panic Playdate console.
 
-Online version: [GFXP Editor](https://dev.playdate.store/tools/gfxp/)
+Online version: [GFXP Editor](https://dev.crankit.app/tools/gfxp/)
 
-Playdate app: [GFXP Viewer](https://playdate.store/app/1008/playdate-dither-viewer/), developed by Foster Douglas.
+Playdate app: [GFXP Viewer](https://crankit.app/app/1008/gfxp-viewer/), developed by Foster Douglas.
 
 For use in C SDK projects: [C library](https://gist.github.com/aschuhardt/ade117b95bb3f2ca99a608224165d4d4), developed by Addison Schuhardt.
 
